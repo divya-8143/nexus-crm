@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import { Sidebar } from './components/layout/Sidebar';
 import { DashboardPage } from './pages/Dashboard/DashboardPage';
 import { CustomerListPage } from './pages/Customers/CustomerListPage';
+import { DealsBoardPage } from './pages/Deals/DealsBoardPage';
+import { HelpdeskQueuePage } from './pages/Helpdesk/HelpdeskQueuePage';
+import { InvoicesPage } from './pages/Billing/InvoicesPage';
+import { AuditLogsPage } from './pages/Audit/AuditLogsPage';
+import { SettingsPage } from './pages/Settings/SettingsPage';
 
 export const App: React.FC = () => {
   const [currentTab, setCurrentTab] = useState('dashboard');
@@ -12,12 +17,11 @@ export const App: React.FC = () => {
       <main className="flex-1 overflow-y-auto">
         {currentTab === 'dashboard' && <DashboardPage />}
         {currentTab === 'customers' && <CustomerListPage />}
-        {currentTab !== 'dashboard' && currentTab !== 'customers' && (
-          <div className="p-8">
-            <h2 className="text-xl font-bold capitalize">{currentTab} Module</h2>
-            <p className="text-sm text-slate-500 mt-2">Enterprise module fully operational.</p>
-          </div>
-        )}
+        {currentTab === 'deals' && <DealsBoardPage />}
+        {currentTab === 'helpdesk' && <HelpdeskQueuePage />}
+        {currentTab === 'billing' && <InvoicesPage />}
+        {currentTab === 'audit' && <AuditLogsPage />}
+        {currentTab === 'settings' && <SettingsPage />}
       </main>
     </div>
   );
