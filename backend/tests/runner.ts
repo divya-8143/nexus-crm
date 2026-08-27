@@ -5,10 +5,11 @@ import { runHelpdeskTests } from './helpdesk.test';
 import { runBillingTests } from './billing.test';
 import { runAuditTests } from './audit.test';
 import { runExtendedDomainTests } from './extended_domains.test';
+import { runFullPipelineIntegrationTest } from './full_lifecycle_pipeline.test';
 
 async function runAllSuites() {
   console.log('====================================================');
-  console.log('       NEXUS CRM ENTERPRISE TEST RUNNER             ');
+  console.log('       NEXUS CRM ENTERPRISE TEST SUITE RUNNER       ');
   console.log('====================================================\n');
 
   let passed = 0;
@@ -21,7 +22,8 @@ async function runAllSuites() {
     { name: 'Helpdesk & SLA Engine Test Suite', fn: runHelpdeskTests },
     { name: 'Billing, Invoicing & Taxes Test Suite', fn: runBillingTests },
     { name: 'Audit & Compliance Ledger Test Suite', fn: runAuditTests },
-    { name: 'Extended Domain & Algorithmic Test Suite (10 Scenarios)', fn: runExtendedDomainTests },
+    { name: 'Extended Domain & Algorithmic Test Suite', fn: runExtendedDomainTests },
+    { name: 'End-to-End Enterprise Lifecycle Pipeline Test', fn: runFullPipelineIntegrationTest },
   ];
 
   for (const suite of suites) {
