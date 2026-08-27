@@ -1,0 +1,35 @@
+{
+  "name": "@nexus/backend",
+  "version": "1.0.0",
+  "description": "NexusCRM Backend Core Engine & Microservices",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "test": "ts-node tests/runner.ts",
+    "db:migrate": "ts-node src/core/database/migrationRunner.ts",
+    "db:seed": "ts-node src/core/database/seedRunner.ts"
+  },
+  "dependencies": {
+    "@nexus/shared": "*",
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "sqlite3": "^5.1.7",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/cors": "^2.8.17",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^20.11.24",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.3"
+  }
+}
