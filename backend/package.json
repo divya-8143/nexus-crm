@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "NexusCRM Backend Core Engine & Microservices",
   "main": "dist/server.js",
+  "private": true,
+  "license": "UNLICENSED",
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",

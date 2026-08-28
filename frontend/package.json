@@ -2,17 +2,19 @@
   "name": "@nexus/frontend",
   "version": "1.0.0",
   "description": "NexusCRM Modern Responsive React Client",
+  "private": true,
+  "license": "UNLICENSED",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "start": "vite preview",
     "preview": "vite preview"
   },
   "dependencies": {
     "@nexus/shared": "file:../shared",
-    "lucide-react": "^0.344.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "vortex-quest": "file:../../git_game"
+    "lucide-react": "^0.344.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.56",

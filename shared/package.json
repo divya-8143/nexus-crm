@@ -4,5 +4,6 @@
   "description": "NexusCRM Shared Domain Contracts & Types",
   "main": "src/index.ts",
   "types": "src/index.ts",
-  "private": true
+  "private": true,
+  "license": "UNLICENSED"
 }
