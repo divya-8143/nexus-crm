@@ -102,7 +102,7 @@ interface CrmContextType {
 
 const CrmContext = createContext<CrmContextType | undefined>(undefined);
 
-// Initial Clean Seed Data
+// Initial Clean Seed Data with multi-year and diverse weekday distribution
 const INITIAL_CUSTOMERS: Customer[] = [
   {
     id: 'cust_1',
@@ -111,13 +111,13 @@ const INITIAL_CUSTOMERS: Customer[] = [
     phone: '+91 98765 43210',
     address: '42 MG Road, Indiranagar',
     city: 'Bengaluru, Karnataka',
-    totalOrders: 3,
-    totalSpent: 58000,
-    lastOrderDate: '2026-08-25',
+    totalOrders: 4,
+    totalSpent: 64500,
+    lastOrderDate: '2026-08-28',
     satisfaction: 'Satisfied',
     rating: 5,
     feedback: 'Product quality is very good and delivery was on time.',
-    latestOrderStatus: 'Delivered',
+    latestOrderStatus: 'Processing',
     createdAt: '2026-01-15',
   },
   {
@@ -127,14 +127,14 @@ const INITIAL_CUSTOMERS: Customer[] = [
     phone: '+91 98111 22334',
     address: '15 Park Street, Flat 4B',
     city: 'Kolkata, West Bengal',
-    totalOrders: 2,
-    totalSpent: 24500,
+    totalOrders: 3,
+    totalSpent: 48500,
     lastOrderDate: '2026-08-22',
     satisfaction: 'Neutral',
     rating: 3,
     feedback: 'Product is good but delivery was late by 2 days.',
     latestOrderStatus: 'Delivered',
-    createdAt: '2026-02-10',
+    createdAt: '2025-02-10',
   },
   {
     id: 'cust_3',
@@ -143,14 +143,14 @@ const INITIAL_CUSTOMERS: Customer[] = [
     phone: '+91 99000 55443',
     address: '88 Ring Road, Satellite',
     city: 'Ahmedabad, Gujarat',
-    totalOrders: 4,
-    totalSpent: 92000,
+    totalOrders: 5,
+    totalSpent: 136000,
     lastOrderDate: '2026-08-27',
     satisfaction: 'Satisfied',
     rating: 5,
     feedback: 'Excellent packaging and prompt customer service support.',
     latestOrderStatus: 'Out for Delivery',
-    createdAt: '2026-03-05',
+    createdAt: '2024-03-05',
   },
   {
     id: 'cust_4',
@@ -159,14 +159,14 @@ const INITIAL_CUSTOMERS: Customer[] = [
     phone: '+91 97444 88990',
     address: '102 Jubilee Hills, Road No. 36',
     city: 'Hyderabad, Telangana',
-    totalOrders: 1,
-    totalSpent: 12000,
+    totalOrders: 3,
+    totalSpent: 46000,
     lastOrderDate: '2026-08-26',
     satisfaction: 'Satisfied',
     rating: 4,
     feedback: 'Smooth ordering experience. Will order again.',
     latestOrderStatus: 'Shipped',
-    createdAt: '2026-04-12',
+    createdAt: '2023-04-12',
   },
   {
     id: 'cust_5',
@@ -175,14 +175,14 @@ const INITIAL_CUSTOMERS: Customer[] = [
     phone: '+91 98222 77665',
     address: '24 Bandra West, Linking Road',
     city: 'Mumbai, Maharashtra',
-    totalOrders: 2,
-    totalSpent: 35000,
+    totalOrders: 3,
+    totalSpent: 70000,
     lastOrderDate: '2026-08-20',
     satisfaction: 'Unsatisfied',
     rating: 2,
     feedback: 'Received damaged outer box packaging, though item was fine.',
     latestOrderStatus: 'Not Delivered',
-    createdAt: '2026-05-18',
+    createdAt: '2022-05-18',
   },
   {
     id: 'cust_6',
@@ -191,18 +191,19 @@ const INITIAL_CUSTOMERS: Customer[] = [
     phone: '+91 98333 11223',
     address: '77 Sector 18, Noida',
     city: 'Delhi NCR',
-    totalOrders: 3,
-    totalSpent: 47500,
+    totalOrders: 4,
+    totalSpent: 79500,
     lastOrderDate: '2026-08-24',
     satisfaction: 'Satisfied',
     rating: 5,
     feedback: 'Loved the fast shipping and authentic warranty card!',
     latestOrderStatus: 'Delivered',
-    createdAt: '2026-06-01',
+    createdAt: '2024-06-01',
   },
 ];
 
 const INITIAL_ORDERS: Order[] = [
+  // 2026 Orders (Weekly & Monthly distributed)
   {
     id: 'ORD-1001',
     customerId: 'cust_1',
@@ -211,11 +212,10 @@ const INITIAL_ORDERS: Order[] = [
     product: 'Pro Ultra Laptop 16-inch',
     quantity: 1,
     amount: 50000,
-    orderDate: '2026-08-25',
+    orderDate: '2026-08-25', // Tuesday
     paymentStatus: 'Paid',
     deliveryStatus: 'Delivered',
     deliveryDate: '2026-08-27',
-    notes: 'Standard priority delivery',
   },
   {
     id: 'ORD-1002',
@@ -225,11 +225,10 @@ const INITIAL_ORDERS: Order[] = [
     product: 'Wireless Noise-Cancelling Headphones',
     quantity: 2,
     amount: 8000,
-    orderDate: '2026-08-15',
+    orderDate: '2026-08-17', // Monday
     paymentStatus: 'Paid',
     deliveryStatus: 'Delivered',
-    deliveryDate: '2026-08-18',
-    notes: 'Gift wrap requested',
+    deliveryDate: '2026-08-19',
   },
   {
     id: 'ORD-1003',
@@ -239,11 +238,10 @@ const INITIAL_ORDERS: Order[] = [
     product: 'Ergonomic Office Chair',
     quantity: 1,
     amount: 14500,
-    orderDate: '2026-08-22',
+    orderDate: '2026-08-22', // Saturday
     paymentStatus: 'Paid',
     deliveryStatus: 'Delivered',
     deliveryDate: '2026-08-26',
-    notes: 'Assembly manual included',
   },
   {
     id: 'ORD-1004',
@@ -253,7 +251,7 @@ const INITIAL_ORDERS: Order[] = [
     product: 'Mechanical Gaming Keyboard',
     quantity: 2,
     amount: 10000,
-    orderDate: '2026-07-10',
+    orderDate: '2026-07-10', // Friday
     paymentStatus: 'Paid',
     deliveryStatus: 'Delivered',
     deliveryDate: '2026-07-14',
@@ -266,10 +264,9 @@ const INITIAL_ORDERS: Order[] = [
     product: '4K Ultra-HD Monitor 32-inch',
     quantity: 2,
     amount: 64000,
-    orderDate: '2026-08-27',
+    orderDate: '2026-08-27', // Thursday
     paymentStatus: 'Paid',
     deliveryStatus: 'Out for Delivery',
-    notes: 'Handle with care - fragile display',
   },
   {
     id: 'ORD-1006',
@@ -279,7 +276,7 @@ const INITIAL_ORDERS: Order[] = [
     product: 'USB-C Universal Docking Station',
     quantity: 2,
     amount: 28000,
-    orderDate: '2026-08-05',
+    orderDate: '2026-08-05', // Wednesday
     paymentStatus: 'Paid',
     deliveryStatus: 'Delivered',
     deliveryDate: '2026-08-08',
@@ -292,10 +289,9 @@ const INITIAL_ORDERS: Order[] = [
     product: 'Smart Fitness Watch Series 5',
     quantity: 1,
     amount: 12000,
-    orderDate: '2026-08-26',
+    orderDate: '2026-08-26', // Wednesday
     paymentStatus: 'Paid',
     deliveryStatus: 'Shipped',
-    notes: 'Air courier express',
   },
   {
     id: 'ORD-1008',
@@ -305,10 +301,9 @@ const INITIAL_ORDERS: Order[] = [
     product: 'Bluetooth Conference Speaker',
     quantity: 2,
     amount: 20000,
-    orderDate: '2026-08-20',
+    orderDate: '2026-08-20', // Thursday
     paymentStatus: 'Paid',
     deliveryStatus: 'Not Delivered',
-    notes: 'Address clarification pending with courier',
   },
   {
     id: 'ORD-1009',
@@ -318,7 +313,7 @@ const INITIAL_ORDERS: Order[] = [
     product: 'Studio Condenser Microphone',
     quantity: 1,
     amount: 15000,
-    orderDate: '2026-06-18',
+    orderDate: '2026-06-18', // Thursday
     paymentStatus: 'Paid',
     deliveryStatus: 'Delivered',
     deliveryDate: '2026-06-22',
@@ -331,7 +326,7 @@ const INITIAL_ORDERS: Order[] = [
     product: 'Wireless Tablet & Stylus Pen',
     quantity: 1,
     amount: 32000,
-    orderDate: '2026-08-24',
+    orderDate: '2026-08-24', // Monday
     paymentStatus: 'Paid',
     deliveryStatus: 'Delivered',
     deliveryDate: '2026-08-27',
@@ -344,7 +339,7 @@ const INITIAL_ORDERS: Order[] = [
     product: 'High-Speed External SSD 2TB',
     quantity: 1,
     amount: 15500,
-    orderDate: '2026-07-28',
+    orderDate: '2026-07-28', // Tuesday
     paymentStatus: 'Paid',
     deliveryStatus: 'Delivered',
     deliveryDate: '2026-08-01',
@@ -357,10 +352,127 @@ const INITIAL_ORDERS: Order[] = [
     product: 'Compact Thermal Receipt Printer',
     quantity: 1,
     amount: 6500,
-    orderDate: '2026-08-28',
-    paymentStatus: 'Pending',
+    orderDate: '2026-08-28', // Friday
+    paymentStatus: 'Paid',
     deliveryStatus: 'Processing',
-    notes: 'Order placed today',
+  },
+  {
+    id: 'ORD-1013',
+    customerId: 'cust_4',
+    customerName: 'Sneha Reddy',
+    customerEmail: 'sneha.reddy@example.com',
+    product: 'Smart Home Security Cam 2-Pack',
+    quantity: 1,
+    amount: 18000,
+    orderDate: '2026-05-14', // Thursday
+    paymentStatus: 'Paid',
+    deliveryStatus: 'Delivered',
+    deliveryDate: '2026-05-17',
+  },
+  {
+    id: 'ORD-1014',
+    customerId: 'cust_3',
+    customerName: 'Amit Patel',
+    customerEmail: 'amit.patel@example.com',
+    product: 'Standing Motorized Desk',
+    quantity: 1,
+    amount: 24000,
+    orderDate: '2026-04-20', // Monday
+    paymentStatus: 'Paid',
+    deliveryStatus: 'Delivered',
+    deliveryDate: '2026-04-24',
+  },
+  {
+    id: 'ORD-1015',
+    customerId: 'cust_2',
+    customerName: 'Priya Sharma',
+    customerEmail: 'priya.sharma@example.com',
+    product: 'Wireless Qi Charging Station',
+    quantity: 3,
+    amount: 24000,
+    orderDate: '2026-03-15', // Sunday
+    paymentStatus: 'Paid',
+    deliveryStatus: 'Delivered',
+    deliveryDate: '2026-03-18',
+  },
+  {
+    id: 'ORD-1016',
+    customerId: 'cust_6',
+    customerName: 'Ananya Roy',
+    customerEmail: 'ananya.roy@example.com',
+    product: 'Noise-Cancelling Earbuds Pro',
+    quantity: 2,
+    amount: 16000,
+    orderDate: '2026-02-12', // Thursday
+    paymentStatus: 'Paid',
+    deliveryStatus: 'Delivered',
+    deliveryDate: '2026-02-15',
+  },
+  {
+    id: 'ORD-1017',
+    customerId: 'cust_4',
+    customerName: 'Sneha Reddy',
+    customerEmail: 'sneha.reddy@example.com',
+    product: 'Dual Monitor Arm Mount',
+    quantity: 2,
+    amount: 16000,
+    orderDate: '2026-01-25', // Sunday
+    paymentStatus: 'Paid',
+    deliveryStatus: 'Delivered',
+    deliveryDate: '2026-01-29',
+  },
+  // Historical Orders (2022 - 2025)
+  {
+    id: 'ORD-1018',
+    customerId: 'cust_5',
+    customerName: 'Vikram Malhotra',
+    customerEmail: 'vikram.m@example.com',
+    product: 'Ultra-Wide Curved Display 34-inch',
+    quantity: 1,
+    amount: 35000,
+    orderDate: '2025-11-18',
+    paymentStatus: 'Paid',
+    deliveryStatus: 'Delivered',
+    deliveryDate: '2025-11-22',
+  },
+  {
+    id: 'ORD-1019',
+    customerId: 'cust_3',
+    customerName: 'Amit Patel',
+    customerEmail: 'amit.patel@example.com',
+    product: 'Enterprise Router & Mesh Wi-Fi 6',
+    quantity: 2,
+    amount: 20000,
+    orderDate: '2024-09-14',
+    paymentStatus: 'Paid',
+    deliveryStatus: 'Delivered',
+    deliveryDate: '2024-09-18',
+  },
+  {
+    id: 'ORD-1020',
+    customerId: 'cust_6',
+    customerName: 'Ananya Roy',
+    customerEmail: 'ananya.roy@example.com',
+    product: 'Portable Bluetooth Projector',
+    quantity: 1,
+    amount: 16000,
+    orderDate: '2023-08-10',
+    paymentStatus: 'Paid',
+    deliveryStatus: 'Delivered',
+    deliveryDate: '2023-08-14',
+  },
+  {
+    id: 'ORD-1021',
+    customerId: 'cust_2',
+    customerName: 'Priya Sharma',
+    customerEmail: 'priya.sharma@example.com',
+    product: 'Smart LED Desk Lamp',
+    quantity: 2,
+    amount: 10000,
+    orderDate: '2022-10-05',
+    paymentStatus: 'Paid',
+    deliveryStatus: 'Delivered',
+    deliveryDate: '2022-10-09',
   },
 ];
 
@@ -469,7 +581,7 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const totalOrdersCount = orders.length;
   const deliveredOrdersCount = orders.filter((o) => o.deliveryStatus === 'Delivered').length;
 
-  // Valid non-cancelled sales
+  // Valid non-cancelled and non-failed orders for sales calculation
   const validOrders = useMemo(() => {
     return orders.filter((o) => o.deliveryStatus !== 'Cancelled' && o.paymentStatus !== 'Failed');
   }, [orders]);
@@ -501,75 +613,105 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const neutralPct = Math.round((neutralCount / totalFeedbackCount) * 100);
   const unsatisfiedPct = Math.round((unsatisfiedCount / totalFeedbackCount) * 100);
 
-  // Sales Chart Aggregations
+  // 1. WEEKLY SALES: Calculated by Day of the Week (Monday to Sunday) from actual valid orders
   const weeklySalesData: SalesPeriodData[] = useMemo(() => {
-    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    const dataMap: Record<string, { sales: number; count: number }> = {
-      Mon: { sales: 24500, count: 2 },
-      Tue: { sales: 50000, count: 1 },
-      Wed: { sales: 12000, count: 1 },
-      Thu: { sales: 64000, count: 2 },
-      Fri: { sales: 38500, count: 3 },
-      Sat: { sales: 42000, count: 2 },
-      Sun: { sales: 28000, count: 1 },
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const salesMap: Record<string, number> = {
+      Monday: 0,
+      Tuesday: 0,
+      Wednesday: 0,
+      Thursday: 0,
+      Friday: 0,
+      Saturday: 0,
+      Sunday: 0,
+    };
+    const countMap: Record<string, number> = {
+      Monday: 0,
+      Tuesday: 0,
+      Wednesday: 0,
+      Thursday: 0,
+      Friday: 0,
+      Saturday: 0,
+      Sunday: 0,
     };
 
-    // Dynamically incorporate valid orders
     validOrders.forEach((ord) => {
+      // Determine day of week from orderDate
       const d = new Date(ord.orderDate);
-      const dayIndex = (d.getDay() + 6) % 7; // Mon = 0
-      const dayName = days[dayIndex] || 'Fri';
-      dataMap[dayName].sales += Math.round(ord.amount * 0.1);
-      dataMap[dayName].count += 1;
+      if (!isNaN(d.getTime())) {
+        const dayIdx = (d.getDay() + 6) % 7; // Monday = 0, Sunday = 6
+        const dayName = days[dayIdx];
+        salesMap[dayName] = (salesMap[dayName] || 0) + ord.amount;
+        countMap[dayName] = (countMap[dayName] || 0) + 1;
+      }
     });
 
     return days.map((day) => ({
       label: day,
-      sales: dataMap[day].sales,
-      orderCount: dataMap[day].count,
+      sales: salesMap[day],
+      orderCount: countMap[day],
     }));
   }, [validOrders]);
 
+  // 2. MONTHLY SALES: Calculated Month-by-Month (Jan to Dec) from actual valid orders
   const monthlySalesData: SalesPeriodData[] = useMemo(() => {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const baseMonthly: Record<string, number> = {
-      Jan: 120000,
-      Feb: 145000,
-      Mar: 180000,
-      Apr: 165000,
-      May: 210000,
-      Jun: 240000,
-      Jul: 295000,
-      Aug: 310000 + totalSalesAmount,
-      Sep: 190000,
-      Oct: 225000,
-      Nov: 280000,
-      Dec: 340000,
+    const salesMap: Record<string, number> = {
+      Jan: 0, Feb: 0, Mar: 0, Apr: 0, May: 0, Jun: 0,
+      Jul: 0, Aug: 0, Sep: 0, Oct: 0, Nov: 0, Dec: 0,
     };
+    const countMap: Record<string, number> = {
+      Jan: 0, Feb: 0, Mar: 0, Apr: 0, May: 0, Jun: 0,
+      Jul: 0, Aug: 0, Sep: 0, Oct: 0, Nov: 0, Dec: 0,
+    };
+
+    validOrders.forEach((ord) => {
+      const d = new Date(ord.orderDate);
+      if (!isNaN(d.getTime())) {
+        const mIdx = d.getMonth(); // 0 = Jan, 11 = Dec
+        const mName = months[mIdx];
+        salesMap[mName] = (salesMap[mName] || 0) + ord.amount;
+        countMap[mName] = (countMap[mName] || 0) + 1;
+      }
+    });
 
     return months.map((m) => ({
       label: m,
-      sales: baseMonthly[m],
-      orderCount: Math.round(baseMonthly[m] / 22000),
+      sales: salesMap[m],
+      orderCount: countMap[m],
     }));
-  }, [totalSalesAmount]);
+  }, [validOrders]);
 
+  // 3. YEARLY SALES: Calculated Year-by-Year (2022 to 2026) from actual valid orders
   const yearlySalesData: SalesPeriodData[] = useMemo(() => {
     const years = ['2022', '2023', '2024', '2025', '2026'];
-    const baseYearly: Record<string, number> = {
-      '2022': 1450000,
-      '2023': 2100000,
-      '2024': 2850000,
-      '2025': 3600000,
-      '2026': 4250000 + totalSalesAmount,
+    const salesMap: Record<string, number> = {
+      '2022': 0, '2023': 0, '2024': 0, '2025': 0, '2026': 0,
     };
+    const countMap: Record<string, number> = {
+      '2022': 0, '2023': 0, '2024': 0, '2025': 0, '2026': 0,
+    };
+
+    validOrders.forEach((ord) => {
+      const d = new Date(ord.orderDate);
+      if (!isNaN(d.getTime())) {
+        const yStr = d.getFullYear().toString();
+        if (salesMap[yStr] !== undefined) {
+          salesMap[yStr] += ord.amount;
+          countMap[yStr] += 1;
+        } else if (d.getFullYear() >= 2026) {
+          salesMap['2026'] += ord.amount;
+          countMap['2026'] += 1;
+        }
+      }
+    });
 
     return years.map((y) => ({
       label: y,
-      sales: baseYearly[y],
-      orderCount: Math.round(baseYearly[y] / 24000),
+      sales: salesMap[y],
+      orderCount: countMap[y],
     }));
-  }, [totalSalesAmount]);
+  }, [validOrders]);
 
   // Actions
   const addCustomer = (

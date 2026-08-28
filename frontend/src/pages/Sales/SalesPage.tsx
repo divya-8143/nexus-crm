@@ -14,41 +14,44 @@ export const SalesPage: React.FC = () => {
       {/* Header Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-800">
         <div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-white">Sales & Revenue Reports</h1>
+          <h1 className="text-2xl font-extrabold tracking-tight text-white">Sales Management</h1>
           <p className="text-xs text-slate-400 mt-1">
-            Weekly, monthly, and yearly sales totals calculated from customer orders
+            Weekly, monthly, and yearly sales graphs calculated directly from customer orders
           </p>
         </div>
       </div>
 
       {/* 3 Core Sales Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div className="p-6 bg-slate-950 rounded-2xl border border-slate-800 shadow-xl">
+        <div className="p-6 bg-slate-950 rounded-2xl border border-slate-800 shadow-xl relative overflow-hidden">
           <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Total Sales Revenue</span>
-          <span className="text-3xl font-extrabold text-white mt-2 block tracking-tight">
+          <span className="text-3xl font-extrabold text-white mt-2 block tracking-tight font-mono">
             {currencySymbol}{totalSalesAmount.toLocaleString()}
           </span>
-          <p className="text-xs text-emerald-400 mt-1">From {validOrders.length} valid completed orders</p>
+          <p className="text-xs text-emerald-400 mt-1">Calculated from {validOrders.length} valid completed orders</p>
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-teal-400" />
         </div>
 
-        <div className="p-6 bg-slate-950 rounded-2xl border border-slate-800 shadow-xl">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Number of Orders</span>
-          <span className="text-3xl font-extrabold text-white mt-2 block tracking-tight">
+        <div className="p-6 bg-slate-950 rounded-2xl border border-slate-800 shadow-xl relative overflow-hidden">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Total Orders Placed</span>
+          <span className="text-3xl font-extrabold text-white mt-2 block tracking-tight font-mono">
             {totalOrdersCount}
           </span>
           <p className="text-xs text-sky-400 mt-1">All placed orders</p>
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-sky-500 to-indigo-500" />
         </div>
 
-        <div className="p-6 bg-slate-950 rounded-2xl border border-slate-800 shadow-xl">
+        <div className="p-6 bg-slate-950 rounded-2xl border border-slate-800 shadow-xl relative overflow-hidden">
           <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Average Order Value (AOV)</span>
-          <span className="text-3xl font-extrabold text-white mt-2 block tracking-tight">
+          <span className="text-3xl font-extrabold text-white mt-2 block tracking-tight font-mono">
             {currencySymbol}{averageOrderValue.toLocaleString()}
           </span>
-          <p className="text-xs text-indigo-400 mt-1">Per valid completed customer order</p>
+          <p className="text-xs text-purple-400 mt-1">Per valid completed customer order</p>
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 to-pink-500" />
         </div>
       </div>
 
-      {/* Sales Overview Chart (Weekly / Monthly / Yearly) */}
+      {/* Dynamic Sales Overview Chart with [ Weekly ] [ Monthly ] [ Yearly ] Tabs */}
       <SalesOverviewChart />
     </div>
   );
