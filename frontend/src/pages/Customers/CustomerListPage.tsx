@@ -1,240 +1,297 @@
 import React, { useState } from 'react';
-import { Customer } from '@nexus/shared';
-import { Table, Column } from '../../components/common/Table';
-import { Badge } from '../../components/common/Badge';
+import { useCrm, Customer, SatisfactionLevel, DeliveryStatus } from '../../context/CrmContext';
+import { DeliveryStatusBadge, SatisfactionBadge } from '../../components/common/StatusBadges';
+import { CustomerDetailsModal } from '../../components/customers/CustomerDetailsModal';
 import { Button } from '../../components/common/Button';
-import { CustomerCreateWizard } from '../../components/forms/CustomerCreateWizard';
-import { CustomerDetailDrawer } from '../../components/customers/CustomerDetailDrawer';
+import { Modal } from '../../components/common/Modal';
+import { Input } from '../../components/common/Input';
 
 export const CustomerListPage: React.FC = () => {
+  const { customers, addCustomer, updateCustomer, deleteCustomer, currencySymbol } = useCrm();
+
+  // Search and Filter States
   const [searchTerm, setSearchTerm] = useState('');
-  const [isWizardOpen, setIsWizardOpen] = useState(false);
+  const [satisfactionFilter, setSatisfactionFilter] = useState<string>('ALL');
+  const [statusFilter, setStatusFilter] = useState<string>('ALL');
+
+  // Modals
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
 
-  const [customers, setCustomers] = useState<Customer[]>([
-    {
-      id: 'cust_101',
-      tenantId: 'tenant_01',
-      accountNumber: 'ACC-849102',
-      name: 'Acme Corporation',
-      companyName: 'Acme Global Holdings LLC',
-      industry: 'Enterprise SaaS',
-      email: 'contact@acmeglobal.com',
-      phone: '+1 (555) 234-5678',
-      website: 'https://acmeglobal.com',
-      lifecycleStage: 'CUSTOMER',
-      leadScore: 92,
-      annualRevenue: 15000000,
-      currency: 'USD',
-      assignedAgentName: 'Sarah Connor',
-      billingAddress: { street1: '100 Silicon Way', city: 'San Francisco', state: 'CA', postalCode: '94105', country: 'USA' },
-      shippingAddress: { street1: '100 Silicon Way', city: 'San Francisco', state: 'CA', postalCode: '94105', country: 'USA' },
-      customFields: {},
-      tags: ['ENTERPRISE', 'TIER_1', 'STRATEGIC'],
-      isVip: true,
-      status: 'ACTIVE',
-      createdAt: '2026-01-15T09:00:00Z',
-      updatedAt: '2026-08-20T14:30:00Z',
-    },
-    {
-      id: 'cust_102',
-      tenantId: 'tenant_01',
-      accountNumber: 'ACC-571932',
-      name: 'Stark Industries',
-      companyName: 'Stark Dynamics Defense',
-      industry: 'Aerospace & Defense',
-      email: 'pepper.potts@starkindustries.io',
-      phone: '+1 (555) 890-1234',
-      website: 'https://starkindustries.io',
-      lifecycleStage: 'OPPORTUNITY',
-      leadScore: 98,
-      annualRevenue: 85000000,
-      currency: 'USD',
-      assignedAgentName: 'Tony Stark',
-      billingAddress: { street1: '10880 Wilshire Blvd', city: 'Los Angeles', state: 'CA', postalCode: '90024', country: 'USA' },
-      shippingAddress: { street1: '10880 Wilshire Blvd', city: 'Los Angeles', state: 'CA', postalCode: '90024', country: 'USA' },
-      customFields: {},
-      tags: ['STRATEGIC', 'VIP', 'DEFENSE'],
-      isVip: true,
-      status: 'ACTIVE',
-      createdAt: '2026-02-10T11:00:00Z',
-      updatedAt: '2026-08-22T16:00:00Z',
-    },
-    {
-      id: 'cust_103',
-      tenantId: 'tenant_01',
-      accountNumber: 'ACC-294819',
-      name: 'Wayne Enterprises',
-      companyName: 'Wayne Technologies Corp',
-      industry: 'Financial Services',
-      email: 'lucius.fox@waynecorp.com',
-      phone: '+1 (555) 432-8765',
-      website: 'https://waynecorp.com',
-      lifecycleStage: 'CUSTOMER',
-      leadScore: 88,
-      annualRevenue: 42000000,
-      currency: 'USD',
-      assignedAgentName: 'Bruce Wayne',
-      billingAddress: { street1: 'Wayne Tower', city: 'Gotham', state: 'NJ', postalCode: '07001', country: 'USA' },
-      shippingAddress: { street1: 'Wayne Tower', city: 'Gotham', state: 'NJ', postalCode: '07001', country: 'USA' },
-      customFields: {},
-      tags: ['TIER_1', 'BANKING'],
-      isVip: true,
-      status: 'ACTIVE',
-      createdAt: '2026-03-01T10:00:00Z',
-      updatedAt: '2026-08-25T12:00:00Z',
-    },
-  ]);
+  // Form State
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
+  const [city, setCity] = useState('');
 
-  const handleRowClick = (c: Customer) => {
-    setSelectedCustomer(c);
-    setIsDrawerOpen(true);
+  const openAddModal = () => {
+    setName('');
+    setEmail('');
+    setPhone('');
+    setAddress('');
+    setCity('');
+    setEditingCustomer(null);
+    setIsAddModalOpen(true);
   };
 
-  const handleCreateCustomer = (newCust: Partial<Customer>) => {
-    const created: Customer = {
-      id: `cust_${Date.now()}`,
-      tenantId: 'tenant_01',
-      accountNumber: `ACC-${Math.floor(100000 + Math.random() * 900000)}`,
-      name: newCust.name || 'New Enterprise',
-      companyName: newCust.companyName,
-      industry: newCust.industry,
-      email: newCust.email || '',
-      phone: newCust.phone,
-      website: newCust.website,
-      lifecycleStage: newCust.lifecycleStage || 'LEAD',
-      leadScore: 75,
-      annualRevenue: newCust.annualRevenue || 0,
-      currency: 'USD',
-      assignedAgentName: 'Alexander Pierce',
-      billingAddress: newCust.billingAddress || ({} as any),
-      shippingAddress: newCust.shippingAddress || ({} as any),
-      customFields: {},
-      tags: newCust.tags || ['NEW'],
-      isVip: newCust.isVip || false,
-      status: 'ACTIVE',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    setCustomers((prev) => [created, ...prev]);
+  const openEditModal = (cust: Customer, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEditingCustomer(cust);
+    setName(cust.name);
+    setEmail(cust.email);
+    setPhone(cust.phone);
+    setAddress(cust.address);
+    setCity(cust.city);
+    setIsAddModalOpen(true);
   };
 
-  const filteredCustomers = customers.filter(
-    (c) =>
+  const handleSaveCustomer = () => {
+    if (!name.trim() || !email.trim()) return;
+
+    if (editingCustomer) {
+      updateCustomer(editingCustomer.id, {
+        name,
+        email,
+        phone,
+        address,
+        city,
+      });
+    } else {
+      addCustomer({
+        name,
+        email,
+        phone,
+        address,
+        city,
+        satisfaction: 'Satisfied',
+        rating: 5,
+        feedback: 'New registered customer.',
+      });
+    }
+
+    setIsAddModalOpen(false);
+  };
+
+  const handleDelete = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (window.confirm('Are you sure you want to delete this customer?')) {
+      deleteCustomer(id);
+    }
+  };
+
+  const handleRowClick = (cust: Customer) => {
+    setSelectedCustomer(cust);
+    setIsDetailsOpen(true);
+  };
+
+  // Filter logic
+  const filteredCustomers = customers.filter((c) => {
+    const matchesSearch =
       c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       c.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.accountNumber.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+      c.phone.includes(searchTerm);
 
-  const columns: Column<Customer>[] = [
-    {
-      header: 'Account / Legal Entity',
-      accessor: (c) => (
-        <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-sky-400">
-            {c.name.charAt(0)}
-          </div>
-          <div>
-            <div className="font-bold text-slate-100 flex items-center gap-2">
-              <span>{c.name}</span>
-              {c.isVip && <Badge variant="warning" size="sm">VIP</Badge>}
-            </div>
-            <div className="text-xs text-slate-400 font-mono mt-0.5">{c.accountNumber} • {c.industry}</div>
-          </div>
-        </div>
-      ),
-    },
-    {
-      header: 'Lifecycle Stage',
-      accessor: (c) => {
-        const variantMap: Record<string, any> = {
-          CUSTOMER: 'success',
-          OPPORTUNITY: 'primary',
-          LEAD: 'neutral',
-          CHURNED: 'danger',
-        };
-        return <Badge variant={variantMap[c.lifecycleStage] || 'neutral'}>{c.lifecycleStage}</Badge>;
-      },
-    },
-    {
-      header: 'Lead Score',
-      accessor: (c) => (
-        <div className="flex items-center gap-2.5">
-          <div className="w-16 bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-700">
-            <div
-              className={`h-full ${c.leadScore > 80 ? 'bg-emerald-500' : 'bg-sky-500'}`}
-              style={{ width: `${c.leadScore}%` }}
-            />
-          </div>
-          <span className="font-bold text-xs font-mono text-slate-200">{c.leadScore}</span>
-        </div>
-      ),
-    },
-    {
-      header: 'Annual Revenue',
-      accessor: (c) => (
-        <span className="font-bold text-white font-mono">
-          ${c.annualRevenue.toLocaleString()}
-        </span>
-      ),
-    },
-    {
-      header: 'Assigned Executive',
-      accessor: (c) => (
-        <div className="flex items-center gap-2">
-          <span className="h-6 w-6 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-300">
-            {c.assignedAgentName?.charAt(0) || 'U'}
-          </span>
-          <span className="text-xs text-slate-300">{c.assignedAgentName || 'Unassigned'}</span>
-        </div>
-      ),
-    },
-  ];
+    const matchesSatisfaction =
+      satisfactionFilter === 'ALL' || c.satisfaction === satisfactionFilter;
+
+    const matchesStatus =
+      statusFilter === 'ALL' || c.latestOrderStatus === statusFilter;
+
+    return matchesSearch && matchesSatisfaction && matchesStatus;
+  });
 
   return (
     <div className="p-8 space-y-6 max-w-7xl mx-auto">
+      {/* Top Title & Add Button */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-800">
         <div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-white">Customer 360 Directory</h1>
-          <p className="text-sm text-slate-400 mt-1">Hierarchical organization trees, contact decision matrices, and lead scoring</p>
+          <h1 className="text-2xl font-extrabold tracking-tight text-white">Customer Management</h1>
+          <p className="text-xs text-slate-400 mt-1">
+            Add, update, search, and manage customer records and satisfaction details
+          </p>
         </div>
-        <Button variant="primary" onClick={() => setIsWizardOpen(true)}>+ Add Enterprise Account</Button>
+        <Button variant="primary" onClick={openAddModal}>+ Add New Customer</Button>
       </div>
 
-      {/* Filter Bar */}
-      <div className="flex items-center gap-4">
-        <div className="w-96">
+      {/* Search & Filter Bar */}
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="flex-1 min-w-[240px]">
           <input
             type="text"
-            placeholder="Filter accounts by name, email, or account number..."
+            placeholder="Search by customer name, email, or phone..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
+            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-sky-500"
           />
         </div>
+
+        {/* Filter by Satisfaction */}
+        <select
+          value={satisfactionFilter}
+          onChange={(e) => setSatisfactionFilter(e.target.value)}
+          className="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-300 focus:outline-none focus:border-sky-500"
+        >
+          <option value="ALL">All Satisfaction</option>
+          <option value="Satisfied">Satisfied</option>
+          <option value="Neutral">Neutral</option>
+          <option value="Unsatisfied">Unsatisfied</option>
+        </select>
+
+        {/* Filter by Latest Order Status */}
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-300 focus:outline-none focus:border-sky-500"
+        >
+          <option value="ALL">All Order Statuses</option>
+          <option value="Delivered">Delivered</option>
+          <option value="Out for Delivery">Out for Delivery</option>
+          <option value="Shipped">Shipped</option>
+          <option value="Processing">Processing</option>
+          <option value="Not Delivered">Not Delivered</option>
+        </select>
       </div>
 
-      <Table
-        columns={columns}
-        data={filteredCustomers}
-        keyExtractor={(c) => c.id}
-        onRowClick={handleRowClick}
-      />
+      {/* Customer Table */}
+      <div className="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-950 shadow-xl">
+        <table className="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr className="border-b border-slate-800 bg-slate-900/80 text-slate-400 font-bold uppercase tracking-wider">
+              <th className="p-4">Customer Name</th>
+              <th className="p-4">Email</th>
+              <th className="p-4">Phone</th>
+              <th className="p-4">Total Orders</th>
+              <th className="p-4">Last Order</th>
+              <th className="p-4">Satisfaction</th>
+              <th className="p-4">Latest Status</th>
+              <th className="p-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-850">
+            {filteredCustomers.length === 0 ? (
+              <tr>
+                <td colSpan={8} className="p-8 text-center text-slate-500">
+                  No customers found matching the search/filter criteria.
+                </td>
+              </tr>
+            ) : (
+              filteredCustomers.map((cust) => (
+                <tr
+                  key={cust.id}
+                  onClick={() => handleRowClick(cust)}
+                  className="hover:bg-slate-900/60 cursor-pointer transition-colors"
+                >
+                  <td className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="h-8 w-8 rounded-lg bg-sky-600/20 text-sky-400 font-bold flex items-center justify-center border border-sky-500/30">
+                        {cust.name.charAt(0)}
+                      </div>
+                      <div>
+                        <div className="font-bold text-white">{cust.name}</div>
+                        <div className="text-[11px] text-slate-400">{cust.city}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="p-4 text-slate-300">{cust.email}</td>
+                  <td className="p-4 font-mono text-slate-300">{cust.phone}</td>
+                  <td className="p-4 font-bold text-white">{cust.totalOrders} orders</td>
+                  <td className="p-4 text-slate-400">{cust.lastOrderDate || '—'}</td>
+                  <td className="p-4">
+                    <SatisfactionBadge satisfaction={cust.satisfaction} rating={cust.rating} />
+                  </td>
+                  <td className="p-4">
+                    <DeliveryStatusBadge status={cust.latestOrderStatus} />
+                  </td>
+                  <td className="p-4 text-right" onClick={(e) => e.stopPropagation()}>
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRowClick(cust);
+                        }}
+                        className="px-2.5 py-1 rounded bg-slate-900 text-sky-400 hover:bg-slate-800 text-xs font-semibold border border-slate-800"
+                      >
+                        View
+                      </button>
+                      <button
+                        onClick={(e) => openEditModal(cust, e)}
+                        className="px-2.5 py-1 rounded bg-slate-900 text-slate-300 hover:text-white hover:bg-slate-800 text-xs font-semibold border border-slate-800"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={(e) => handleDelete(cust.id, e)}
+                        className="px-2.5 py-1 rounded bg-rose-500/15 text-rose-400 hover:bg-rose-500/25 text-xs font-semibold border border-rose-500/30"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
 
-      {/* Customer Creation Multi-Step Wizard */}
-      <CustomerCreateWizard
-        isOpen={isWizardOpen}
-        onClose={() => setIsWizardOpen(false)}
-        onSuccess={handleCreateCustomer}
-      />
-
-      {/* Customer 360 Detail Drawer */}
-      <CustomerDetailDrawer
+      {/* Customer Details Modal */}
+      <CustomerDetailsModal
         customer={selectedCustomer}
-        isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
+        isOpen={isDetailsOpen}
+        onClose={() => setIsDetailsOpen(false)}
       />
+
+      {/* Add / Edit Customer Modal */}
+      <Modal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        title={editingCustomer ? 'Edit Customer' : 'Add New Customer'}
+        footer={
+          <div className="flex justify-end gap-3 w-full">
+            <Button variant="outline" onClick={() => setIsAddModalOpen(false)}>Cancel</Button>
+            <Button variant="primary" onClick={handleSaveCustomer}>
+              {editingCustomer ? 'Update Customer' : 'Save Customer'}
+            </Button>
+          </div>
+        }
+      >
+        <div className="space-y-4">
+          <Input
+            label="Customer Full Name"
+            placeholder="e.g. Ravi Kumar"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <Input
+            label="Email Address"
+            type="email"
+            placeholder="e.g. ravi@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            label="Phone Number"
+            placeholder="e.g. +91 98765 43210"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+          <Input
+            label="Street Address"
+            placeholder="e.g. 42 MG Road, Indiranagar"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          />
+          <Input
+            label="City & State"
+            placeholder="e.g. Bengaluru, Karnataka"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+          />
+        </div>
+      </Modal>
     </div>
   );
 };
